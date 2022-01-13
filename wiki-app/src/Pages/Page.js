@@ -38,7 +38,17 @@ const Page = () =>
     // Wir erstellen eine funktion, um den aktuellen eintrag löschen zu können
     const handleDeleteEntry = () =>
     {
-        console.log('löschen...');
+        // Wir holen uns alle einträge
+        const allEntries = JSON.parse(window.localStorage.getItem('entries'));
+
+        // Wir filtern den gesuchten eintrag aus
+        const leftoverEntries = allEntries.filter(oldEntries => oldEntries.id !== entry.id);
+
+        // Wir überschreiben das alte array in der localstorage mit dem neuen array ohne den aktuellen eintrag.
+        window.localStorage.setItem('entries', JSON.stringify(leftoverEntries));
+
+        // Wir bauen den useNavigate hook ein, um zurück zur startseite zu gelangen.
+        navigate('/');
     }
 
     return(
