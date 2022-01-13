@@ -1,19 +1,26 @@
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { Header } from './Components';
+import { NotFound, Editor, Page, Welcome } from "./Pages";
 
 function App()
 {
     return (
         <div className="App">
-            {/* Header (Komponent) */}
+            <BrowserRouter>
+                <Header/>
 
-            {/* 
-                Routen:
-                / = unsere Willkommensseite
-                /entry/create = unsere seite zum erstellen von einträgen
-                /entry/:id = unsere seite zum anzeigen von einträgen
-                /entry/:id/edit = unsere seite zum editieren von einträgen
-                * = nicht gefunden
-             */}
+                <div className="layout">
+                    <Routes>
+                        <Route path="/" element={ <Welcome/> }></Route>
+                        <Route path="/entry/create" element={ <Editor/> }></Route>
+                        <Route path="/entry/:id" element={ <Page/> }></Route>
+                        <Route path="/entry/:id/edit" element={ <Editor/> }></Route>
+                        <Route path="*" element={ <NotFound/> }></Route>
+                    </Routes>
+                </div>
+            </BrowserRouter>
+            
         </div>
     );
 }
