@@ -31,8 +31,48 @@ const Editor = () =>
     }, []);
 
     // wir schreiben eine funktion zum speichern unserer änderungen, oder dem erstellen eines neuen eintrags.
-    const handleSave = () => {
-        console.log("funktioniert...");
+    const handleSave = () =>
+    {
+        const newPost =
+        {
+            id: slugify(title,
+            {
+                lower: true, // damit der slug-string kleingeschrieben wir
+                strict: true, // damit spezielle charaktere gelöscht werden
+                trim: true // damit vor und hinter dem slug kein leerzeichen entsteht.
+            }),
+            title, // kurz für title: title,
+            content, // kurz für content: content,
+            timestamp: new Date().getTime()
+        }
+
+        // Wir holen uns alle einträge, und setzen für den notfall, das array auf leer.
+        const entries = JSON.parse(window.localStorage.getItem('entries')) || [];
+
+        // Wenn wir einen vorhandenen eintrag editieren
+        if(id !== undefined)
+        {
+            // Wir holen uns alle einträge die NICHT die gesuchte ID haben
+            const filteredEntries = entries.filter(entry => entry.id !== id);
+
+            // wir Fügen den eintrag hinzu
+            filteredEntries.push(newPost);
+
+            // wir ersetzen das vorhandene array mit dem neuen, inklusive der änderung.
+            window.localStorage.setItem('entries', JSON.stringify(filteredEntries));
+        }
+        // Wenn wir einen neuen eintrag hinzufügen.
+        else
+        {
+            // Wir pushen den neuen eintrag in unsere entries
+            entries.push(newPost);
+
+            // wir ersetzen das vorhandene array mit dem neuen, inklsive des neuen eintrags.
+            window.localStorage.setItem('entries', JSON.stringify(entries));
+        }
+
+        // wir nutzen den useNavigate hook um auf die seite mit dem eintrag per slug zu kommen.
+        navigate('/entry/' + newPost.id);
     }
 
     return(
@@ -68,6 +108,19 @@ const Editor = () =>
                 <h3>Inhalt</h3>
                 <ReactMarkdown>{ content }</ReactMarkdown>
             </div>
+
+            <button
+                onClick={ handleSave }
+                disabled={ title.length === 0 }
+            >
+                Speichern
+            </button>
+            <a
+                href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
+                target="_blank"
+            >
+                Markdown Cheatsheet
+            </a>
         </div>
     )
 };
