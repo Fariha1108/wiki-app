@@ -41,7 +41,7 @@ const Welcome = () =>
             }
 
             // Wir sortieren unsere einträge.
-            r[group].children.sort((a, b) => a.title.toUpperCase() > b.title.toUpperCase());
+            r[group].children.sort((a, b) => a.title.toUpperCase() > b.title.toUpperCase() && 1 || -1);
 
             return r;
         }, {});
@@ -50,7 +50,7 @@ const Welcome = () =>
         const result = Object.values(sortedEntries);
 
         // Wir sortieren unsere gruppen.
-        result.sort((a, b) => a.group.toUpperCase() > b.group.toUpperCase());
+        result.sort((a, b) => a.group.toUpperCase() > b.group.toUpperCase() && 1 || -1);
 
         setEntries(result);
         setLoading(false);
