@@ -4,6 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// Wenn wir hier fehler haben, importieren wir das css vom cdn direkt in die index.html.
+// import 'semantic-ui-css/semantic.min.css'
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

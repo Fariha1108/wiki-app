@@ -1,7 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Container } from "semantic-ui-react";
 
 import { Header } from './Components';
 import { NotFound, Editor, Page, Welcome } from "./Pages";
+
+import './App.css';
 
 function App()
 {
@@ -10,7 +13,7 @@ function App()
             <BrowserRouter>
                 <Header/>
 
-                <div className="layout">
+                <Container>
                     <Routes>
                         <Route path="/" element={ <Welcome/> }></Route>
                         <Route path="/entry/create" element={ <Editor/> }></Route>
@@ -18,7 +21,7 @@ function App()
                         <Route path="/entry/:id/edit" element={ <Editor/> }></Route>
                         <Route path="*" element={ <NotFound/> }></Route>
                     </Routes>
-                </div>
+                </Container>
             </BrowserRouter>
             
         </div>

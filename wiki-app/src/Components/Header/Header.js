@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 
+import { Menu, Segment, Icon, Popup } from 'semantic-ui-react';
+
 const Header = () =>
 {
     // Wir erstellen einen hook in dem wir die id eines zufallseintrag speichern
@@ -23,13 +25,31 @@ const Header = () =>
     }, []);
 
     return(
-        <div className="Header">
-            <ul>
-                <li><NavLink to="/">Startseite</NavLink></li>
-                <li><Link to={`/entry/${ randomEntry }`}>Zufälliger Eintrag</Link></li>
-                <li><NavLink to="/entry/create">Eintrag Erstellen</NavLink></li>
-            </ul>
-        </div>
+        <Segment inverted>
+            <Menu fixed="top" inverted>
+                <Menu.Item header>Unsere Wiki</Menu.Item>
+                
+                <Menu.Item as={NavLink} to="/">
+                    Startseite
+                </Menu.Item>
+                <Menu.Item as={Link} to={`/entry/${ randomEntry }`}>
+                    Zufälliger Eintrag
+                </Menu.Item>
+
+                <Menu.Menu position="right">
+                    <Popup
+                        content="Einen neuen eintrag verfassen"
+                        trigger={
+                            <Menu.Item as={NavLink} to="/entry/create">
+                                <Icon name="add" size="small" />
+                            </Menu.Item>
+                        }
+                        basic
+                        inverted
+                    />
+                </Menu.Menu>
+            </Menu>
+        </Segment>
     )
 };
 

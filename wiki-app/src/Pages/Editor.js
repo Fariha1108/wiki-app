@@ -1,5 +1,15 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import React, { useState, useEffect} from 'react';
+import { 
+    Header, 
+    Grid, 
+    Input,
+    TextArea,
+    Form,
+    Segment,
+    Button,
+    Tab
+} from 'semantic-ui-react';
 
 import ReactMarkdown from 'react-markdown'; // Für unsere markdown ansicht
 import slugify from 'slugify'; // Für unseren slug, mit dem wir, als id, den artikel aufrufen können
@@ -9,6 +19,7 @@ const Editor = () =>
     // Wir erstellen 2 state hooks, einen für den titel und einen für den inhalt des eintrages
     const [ title, setTitle ] = useState('');
     const [ content, setContent ] = useState('');
+    const [ windowWidth, setWindowWidth ] = useState(1000);
 
     const navigate = useNavigate();
     const { id } = useParams();
@@ -29,6 +40,20 @@ const Editor = () =>
             setContent(currentEntry.content);
         }
     }, []);
+
+    useEffect(() =>
+    {
+        const updateWindowDimensions = () =>
+        {
+            const newWidth = window.innerWidth;
+
+            setWindowWidth(newWidth);
+        }
+
+        window.addEventListener('resize', updateWindowDimensions);
+
+        return () => window.removeEventListener('resize', updateWindowDimensions);
+    }, [])
 
     // wir schreiben eine funktion zum speichern unserer änderungen, oder dem erstellen eines neuen eintrags.
     const handleSave = () =>
@@ -77,50 +102,93 @@ const Editor = () =>
 
     return(
         <div className="Editor">
-            <h1>Eintrag erstellen</h1>
-
-            <div>
-                <h3>Titel</h3>
-
-                <input
-                    type="text"
-                    value={ title }
-                    onChange={ (e) => setTitle(e.target.value) }
-                />
-                <br />
-
-                <h3>Inhalt</h3>
-
-                <textarea
-                    value={ content }
-                    onChange={ (e) => setContent(e.target.value) }
-                    cols="30"
-                    rows="10"
-                ></textarea>
-            </div>
-
-            <hr />
-
-            <div>
-                <h3>Titel</h3>
-                <p>{ title }</p>
-                <br />
-                <h3>Inhalt</h3>
-                <ReactMarkdown>{ content }</ReactMarkdown>
-            </div>
-
-            <button
-                onClick={ handleSave }
-                disabled={ title.length === 0 }
+            <Header
+                as="h1"
+                textAlign="center"
+                dividing
             >
-                Speichern
-            </button>
-            <a
-                href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
-                target="_blank"
-            >
-                Markdown Cheatsheet
-            </a>
+                <Header.Content>
+                    Eintrag erstellen
+                </Header.Content>
+            </Header>
+            
+            <Grid>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Header as="h3">Titel</Header>
+                        <Input
+                            fluid
+                            value={ title }
+                            onChange={ (e) => setTitle(e.target.value) }
+                        />
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
+            {
+                windowWidth < 768 ?
+                <Tab
+                    menu={{ pointing: true }}
+                    panes={
+                        [
+                            { menuItem: "Editor", render: () => (
+                                    <Form>
+                                    <TextArea
+                                        rows={20}
+                                        value={ content }
+                                        onChange={ (e) => setContent(e.target.value) }
+                                    />
+                                </Form>
+                                
+                            )},
+                            { menuItem: "Preview", render: () => (
+                                <Segment basic>
+                                    <ReactMarkdown>{ content }</ReactMarkdown>
+                                </Segment>
+                            )}
+                        ]
+                    }
+                ></Tab>
+                :
+                <Grid>
+                    <Grid.Row>
+                        <Grid.Column width={ 8 }>
+                            <Form>
+                                <Header as="h3">Inhalt</Header>
+                                <TextArea
+                                    rows={20}
+                                    value={ content }
+                                    onChange={ (e) => setContent(e.target.value) }
+                                />
+                            </Form>
+                        </Grid.Column>
+                        <Grid.Column width={ 8 }>
+                            <Header as="h3">Inhalt</Header>
+                            <Segment>
+                                <ReactMarkdown>{ content }</ReactMarkdown>
+                            </Segment>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <a
+                        href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
+                        target="_blank"
+                    >
+                        Markdown Cheatsheet
+                    </a>
+                </Grid>
+            }
+
+            
+
+            <Button.Group fluid className="lowerButtons">
+                <Button
+                    color="green"
+                    onClick={ handleSave }
+                    disabled={ title.length === 0 }
+                >
+                    Speichern
+                </Button>
+                <Button color="red">Abbrechen</Button>
+            </Button.Group>
         </div>
     )
 };
