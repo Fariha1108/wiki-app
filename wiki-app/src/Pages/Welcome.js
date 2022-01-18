@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import Container from 'react-bootstrap/Container';
+import Accordion from 'react-bootstrap/Accordion';
+import Stack from 'react-bootstrap/Stack';
+import Alert from 'react-bootstrap/Alert';
+import Spinner from 'react-bootstrap/Spinner';
+
 const Welcome = () =>
 {
     // Wir erstellen zwei state hooks, einen für alle einträge, und einen für unseren loading state.
@@ -57,46 +63,55 @@ const Welcome = () =>
     }, [])
 
     return(
-        <div className="Welcome">
-            <h2>Willkommen auf unserer Wiki</h2>
+        <Container>
+            <div className="Welcome">
+                <h2>Willkommen auf unserer Wiki</h2>
 
-            {
-                loading ?
-                <p>Loading...</p>
-                :
-                <>
-                    <h3>Einträge</h3>
-                    {
-                        entries.length === 0 ?
-                        <p>Keine einträge vorhanden!</p>
-                        :
-                        entries.map((item, i) =>
+                {
+                    loading ?
+                    <Spinner animation="border" />
+                    :
+                    <>
+                        <h3>Einträge</h3>
                         {
-                            return(
-                                <div key={ i }>
-                                    <b>{ item.group }</b>
-                                    <br />
-                                    <ul>
-                                        {
-                                            item.children.map((entry, j) =>
+                            entries.length === 0 ?
+                            <Alert variant="danger">
+                                Kein Einträge vorhanden!
+                                <br />
+                                <br />
+                                <Link to="/entry/create">Erstelle jetzt deinen ersten Eintrag</Link>
+                            </Alert>
+                            :
+                            <Accordion defaultActiveKey="0">
+                                {
+                                entries.map((item, i) =>
+                                {
+                                    return(
+                                        <Accordion.Item eventKey={ i.toString() } key={ i }>
+                                            <Accordion.Header>{ item.group }</Accordion.Header>
+                                            <Accordion.Body>
                                             {
-                                                return(
-                                                    <li key={ j }>
-                                                        <Link to={ `/entry/${ entry.id }` }>
-                                                            { entry.title }
-                                                        </Link>
-                                                    </li>
-                                                )
-                                            })
-                                        }
-                                    </ul>
-                                </div>
-                            )
-                        })
-                    }
-                </>
-            }
-        </div>
+                                                item.children.map((entry, j) =>
+                                                {
+                                                    return(
+                                                        <Stack key={ j } gap={ 3 }>
+                                                            <Link to={ `/entry/${ entry.id }` }>
+                                                                { entry.title }
+                                                            </Link>
+                                                        </Stack>
+                                                    )
+                                                })
+                                            }
+                                            </Accordion.Body>
+                                            </Accordion.Item>
+                                    )
+                                })}
+                            </Accordion>
+                        }
+                    </>
+                }
+            </div>
+        </Container>
     )
 };
 

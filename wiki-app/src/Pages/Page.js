@@ -3,6 +3,13 @@ import { useParams, useNavigate } from 'react-router';
 import ReactMarkdown from 'react-markdown';
 import Moment from 'react-moment';
 
+import Spinner from 'react-bootstrap/Spinner';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+
 // wir importieren die deutschen sprachdaten von moment.
 import 'moment/locale/de';
 
@@ -52,36 +59,76 @@ const Page = () =>
     }
 
     return(
-        <div className="Page">
+        <Container>
             {
                 loading ?
-                <p>Loading...</p>
+                <Spinner animation="border" />
                 :
-                <div>
-                    <h1>{ entry.title }</h1>
+                <>
+                    <Row>
+                        <Col>
+                            <br />
+                            <h1>{ entry.title }</h1>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Button
+                            onClick={ () => handleEditEntry() }
+                            as={Col}
+                            size="lg"
+                            variant="warning"
+                        >
+                            Editieren
+                        </Button>
+                        <Button
+                            onClick={ () => handleDeleteEntry() }
+                            as={Col}
+                            className="mx-2"
+                            size="lg"
+                            variant="danger"
+                        >
+                            Löschen
+                        </Button>
+                        
+                    </Row>
+                    <Row>
+                        <Col>
+                            <br />
+                            <ReactMarkdown>{ entry.content }</ReactMarkdown>
 
-                    <div>
-                        <button onClick={ () => handleEditEntry() }>Editieren</button>
-                        <button onClick={ () => handleDeleteEntry() }>Löschen</button>
-                    </div>
+                            <Card
+                                body
+                                className="text-center"
+                                bg="secondary"
+                                text="white"
+                            >
+                                Letzte änderung:&nbsp;
+                                <b>
+                                    <Moment fromNow locale="de">
+                                        {
+                                            console.log(entry.timestamp)
+                                            // new Date(entry.timestamp).toLocaleString()
+                                        }
+                                    </Moment>
+                                </b>
+                            </Card>
+                            
+                        </Col>
+                    </Row>
+                </>
 
-                    <ReactMarkdown>{ entry.content }</ReactMarkdown>
+                // <div>
+                //     
 
-                    <hr />
+                //     
 
-                                {/* non breaking space: &nbsp; */}
-                    Letzte änderung:&nbsp;
-                    <b>
-                        <Moment fromNow locale="de">
-                            {
-                                console.log(entry.timestamp)
-                                // new Date(entry.timestamp).toLocaleString()
-                            }
-                        </Moment>
-                    </b>
-                </div>
+                //     <hr />
+
+                //                 {/* non breaking space: &nbsp; */}
+
+                // </div>
             }
-        </div>
+        </Container>
     )
 };
 

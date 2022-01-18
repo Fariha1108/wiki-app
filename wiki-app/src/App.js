@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Header } from './Components';
 import { NotFound, Editor, Page, Welcome } from "./Pages";
 
+import './App.css';
+
 function App()
 {
     return (
