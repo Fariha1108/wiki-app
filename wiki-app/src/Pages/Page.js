@@ -106,8 +106,7 @@ const Page = () =>
                                 <b>
                                     <Moment fromNow locale="de">
                                         {
-                                            console.log(entry.timestamp)
-                                            // new Date(entry.timestamp).toLocaleString()
+                                            entry.timestamp
                                         }
                                     </Moment>
                                 </b>
