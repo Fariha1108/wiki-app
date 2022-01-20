@@ -1,20 +1,23 @@
 import { useNavigate } from "react-router-dom";
 
-const NotFound = () =>
-{
+import { Segment, Button } from 'semantic-ui-react';
+
+const NotFound = () => {
     // Wir erstellen einen useNavigate Hook.
     const navigate = useNavigate();
 
-    return(
+    return (
         <div className="NotFound">
-            <h1>404</h1>
+            <Segment>
+                <h1>404</h1>
 
-            <p>
-                Seite nicht gefunden!
-            </p>
+                <p>
+                    Seite nicht gefunden!
+                </p>
 
-            {/* Wir erstellen einen button, mit dem wir durch den wert "-1" in navigate auf die vorherige seite zurückkehren könenn. */}
-            <button onClick={ () => navigate(-1) }>Zurück zur vorherigen Seite</button>
+                {/* Wir erstellen einen button, mit dem wir durch den wert "-1" in navigate auf die vorherige seite zurückkehren könenn. */}
+                <Button onClick={() => navigate(-1)} size="large" inverted color='blue'>Zurück zur vorherigen Seite</Button>
+            </Segment>
         </div>
     )
 };
